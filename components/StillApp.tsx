@@ -155,4 +155,145 @@ function Journal({sessions}:{sessions:Session[]}){return <><header style={{margi
 function Profile({dark,setDark,notify,logout,privacy,setPrivacy}:any){return <><header style={{marginBottom:22}}><div className="eyebrow">Profile & preferences</div><h1 className="title">Make Still yours.</h1><p className="muted">Timezone, reminders, appearance, and privacy stay under your control.</p></header><div className="grid2"><section className="card"><h2 className="sectionTitle">Preferences</h2><div className="privacyRow"><div><strong>Dark calming theme</strong><div className="tiny">Low-light interface</div></div><button className={'switch '+(dark?'on':'')} onClick={()=>setDark(!dark)}><i/></button></div><div className="privacyRow"><div><strong>Timezone</strong><div className="tiny">Used for streak boundaries</div></div><span>{TZ}</span></div><div className="privacyRow"><div><strong>Browser reminders</strong><div className="tiny">Permission requested only when you choose</div></div><button className="btn" onClick={notify}>Enable</button></div></section><section className="card"><h2 className="sectionTitle">Partner privacy</h2>{Object.entries({streak:'Share streak',today:'Share today status',weekly:'Share weekly minutes',sharedHabits:'Share consented habits'}).map(([k,l])=><div className="privacyRow" key={k}><strong>{l}</strong><button className={'switch '+(privacy[k]?'on':'')} onClick={()=>setPrivacy({...privacy,[k]:!privacy[k]})}><i/></button></div>)}</section></div><section className="card" style={{marginTop:20}}><h2 className="sectionTitle">Account</h2><div className="pills" style={{marginTop:12}}><button className="danger" onClick={logout}>Log out</button></div></section></>}
 
 function HabitModal({habit,save,close}:any){return <div className="modalBack"><div className="modal"><div className="sectionHead"><div><div className="eyebrow">{habit?'Edit habit':'New habit'}</div><h2 className="sectionTitle">Design a small promise</h2></div><button className="iconBtn" onClick={close}>×</button></div><form onSubmit={save} style={{display:'grid',gap:13}}><div className="field"><label>Name</label><input className="input" name="name" defaultValue={habit?.name||''} maxLength={40}/></div><div className="field"><label>Icon</label><div className="pills">{ICONS.map(i=><label className="pill" key={i}><input type="radio" name="icon" value={i} defaultChecked={(habit?.icon||'🌿')===i}/> {i}</label>)}</div></div><div className="field"><label>Colour</label><div className="pills">{COLORS.map(c=><label className="pill" key={c}><input type="radio" name="color" value={c} defaultChecked={(habit?.color||COLORS[0])===c}/><span style={{display:'inline-block',width:14,height:14,borderRadius:'50%',background:c}}/></label>)}</div></div><div className="field"><label>Schedule</label><div className="pills">{['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((d,i)=><label className="pill" key={d}><input type="checkbox" name={'d'+i} defaultChecked={habit?habit.schedule.includes(i):true}/> {d}</label>)}</div></div><div className="fieldGrid"><div className="field"><label>Optional target</label><input className="input" name="target" defaultValue={habit?.target||''} placeholder="30 min / 8 glasses"/></div><div className="field"><label>Reminder time</label><input className="input" type="time" name="reminder" defaultValue={habit?.reminder||''}/></div></div><div className="controls" style={{justifyContent:'flex-end'}}><button type="button" className="btn" onClick={close}>Cancel</button><button className="primary">{habit?'Save changes':'Create habit'}</button></div></form></div></div>}
-function Reflection({moodBefore,setMoodBefore,moodAfter,setMoodAfter,rating,setRating,note,setNote,sounds,save,close}:any){const moods=['😣','😴','😐','🙂','😌'];return <div className="modalBack"><div className="modal"><div className="sectionHead"><div><div className="eyebrow">Session complete</div><h2 className="sectionTitle">How did the practice meet you?</h2></div><button className="iconBtn" onClick={close}>×</button></div><div className="field"><label>Mood before</label><div className="moods">{moods.map(m=><button className={'mood '+(moodBefore===m?'active':'')} key={m} onClick={()=>setMoodBefore(m)}>{m}</button>)}</div></div><div className="field" style={{marginTop:12}}><label>Mood after</label><div className="moods">{moods.map(m=><button className={'mood '+(moodAfter===m?'active':'')} key={m} onClick={()=>setMoodAfter(m)}>{m}</button>)}</div></div><div className="field" style={{marginTop:12}}><label>Session rating</label><div className="stars">{[1,2,3,4,5].map(n=><button className={'star '+(rating>=n?'on':'')} key={n} onClick={()=>setRating(n)}>★</button>)}</div></div><div className="field" style={{marginTop:12}}><label>Private note</label><textarea className="textarea" value={note} onChange={e=>setNote(e.target.value)} placeholder="What did you notice?"/></div><div className="success" style={{marginTop:12}}>Sound combination: {sounds.length?sounds.join(' + '):'Silent meditation'}</div><div className="controls" style={{justifyContent:'flex-end',marginTop:16}}><button className="btn" onClick={close}>Not now</button><button className="primary" onClick={save}>Save reflection</button></div></div></div>}
+function Reflection({
+  moodBefore,
+  setMoodBefore,
+  moodAfter,
+  setMoodAfter,
+  rating,
+  setRating,
+  note,
+  setNote,
+  sounds,
+  save,
+  close
+}: any) {
+  const moods = ['😣', '😴', '😐', '🙂', '😌'];
+
+  const soundLabel =
+    sounds && sounds.length > 0
+      ? sounds.join(' + ')
+      : 'Silent meditation';
+
+  return (
+    <div className="modalBack">
+      <div className="modal">
+
+        <div className="sectionHead">
+          <div>
+            <div className="eyebrow">Session complete</div>
+            <h2 className="sectionTitle">
+              How did the practice meet you?
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            className="iconBtn"
+            onClick={close}
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="field">
+          <label>Mood before</label>
+
+          <div className="moods">
+            {moods.map((m) => (
+              <button
+                type="button"
+                className={
+                  'mood ' + (moodBefore === m ? 'active' : '')
+                }
+                key={m}
+                onClick={() => setMoodBefore(m)}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="field" style={{ marginTop: 12 }}>
+          <label>Mood after</label>
+
+          <div className="moods">
+            {moods.map((m) => (
+              <button
+                type="button"
+                className={
+                  'mood ' + (moodAfter === m ? 'active' : '')
+                }
+                key={m}
+                onClick={() => setMoodAfter(m)}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="field" style={{ marginTop: 12 }}>
+          <label>Session rating</label>
+
+          <div className="stars">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button
+                type="button"
+                className={'star ' + (rating >= n ? 'on' : '')}
+                key={n}
+                onClick={() => setRating(n)}
+              >
+                ★
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="field" style={{ marginTop: 12 }}>
+          <label>Private note</label>
+
+          <textarea
+            className="textarea"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="What did you notice?"
+          />
+        </div>
+
+        <div
+          className="success"
+          style={{ marginTop: 12 }}
+        >
+          Sound combination: {soundLabel}
+        </div>
+
+        <div
+          className="controls"
+          style={{
+            justifyContent: 'flex-end',
+            marginTop: 16
+          }}
+        >
+          <button
+            type="button"
+            className="btn"
+            onClick={close}
+          >
+            Not now
+          </button>
+
+          <button
+            type="button"
+            className="primary"
+            onClick={save}
+          >
+            Save reflection
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
