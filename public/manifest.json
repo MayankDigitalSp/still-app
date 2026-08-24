@@ -1,0 +1,10 @@
+{
+  "name":"Still — Meditation & Habits",
+  "short_name":"Still",
+  "start_url":"/",
+  "display":"standalone",
+  "background_color":"#edf1e8",
+  "theme_color":"#6f8b75",
+  "description":"Meditation, habits, reflection, and gentle accountability.",
+  "icons":[]
+}
