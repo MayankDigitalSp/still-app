@@ -66,7 +66,7 @@ export default function StillApp(){
 
   useEffect(()=>{
     if(!timer.endAt||!['prep','running'].includes(timer.phase))return;
-    const id=setInterval(()=>{
+    const id=window.setInterval(()=>{
       const r=Math.max(0,Math.ceil((timer.endAt!-Date.now())/1000));setTimer(t=>({...t,remaining:r}));
       if(timer.phase==='running'&&timer.intervalMin>0){const elapsed=timer.durationSec-r,every=timer.intervalMin*60;if(elapsed>0&&Math.floor(elapsed/every)>intervalCount.current){intervalCount.current=Math.floor(elapsed/every);bell()}}
       if(r<=0){if(timer.phase==='prep'){bell();setTimer(t=>({...t,phase:'running',remaining:t.durationSec,endAt:Date.now()+t.durationSec*1000}))}else{bell();stopAudio();setTimer(t=>({...t,phase:'complete',remaining:0,endAt:null}));setShowReflection(true)}}
